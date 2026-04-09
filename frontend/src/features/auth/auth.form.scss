@@ -1,0 +1,167 @@
+
+main {
+  min-height: 100vh;
+  width: 100%;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+
+  /* background upgrade */
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* container */
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+
+  background: #ffffff;
+  border-radius: 12px;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* heading */
+.form-container h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* input group */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* labels */
+.input-group label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* inputs */
+.input-group input {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+/* focus effect */
+.input-group input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+}
+
+/* button wrapper */
+.button {
+  margin-top: 1.5rem;
+}
+
+.primary-button button {
+  position: relative;
+  width: 100%;
+  padding: 0.85rem;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+
+  overflow: hidden;
+}
+
+/* hover = stronger lift + glow */
+.primary-button button:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+}
+
+/* click = satisfying press */
+.primary-button button:active {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* shine animation */
+.primary-button button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+
+  transition: 0.5s;
+}
+
+/* trigger shine on hover */
+.primary-button button:hover::before {
+  left: 100%;
+}
+
+/* keyboard focus */
+.primary-button button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.6);
+}
+.form-text {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+.link-button {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* underline animation */
+.link-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+
+  width: 0%;
+  height: 2px;
+  background: #667eea;
+
+  transition: width 0.3s ease;
+}
+
+.link-button:hover::after {
+  width: 100%;
+}
+
+/* slight lift effect */
+.link-button:hover {
+  color: #5a67d8;
+}
