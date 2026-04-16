@@ -1,21 +1,28 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const app = express();
+const cors = require('cors');
 
+const app = express();  // ✅ FIRST create app
 
-app.use(express.json());// Middleware to parse JSON bodies
-app.use(cookieParser()); // Middleware to parse cookies
+// ✅ THEN use middleware
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+
+app.use(express.json());
+app.use(cookieParser());
+
 // Import routes
 const AuthRouter = require('./routes/auth.route');
 
-// Use the auth routes
+// Use routes
 app.use('/api/auth', AuthRouter);
 
-// Add this at the end of app.js before module.exports
+// Global error handler
 app.use((err, req, res, next) => {
-    console.error('Unhandled error:', err);
-    res.status(500).json({ message: 'Server error', error: err.message });
+  console.error('Unhandled error:', err);
+  res.status(500).json({ message: 'Server error', error: err.message });
 });
 
 module.exports = app;
-

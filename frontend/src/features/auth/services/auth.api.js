@@ -1,6 +1,9 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:5000/api/auth';
+axios.create({
+  withCredentials: true,
+});
 
+const API_URL = 'http://localhost:5000/api/auth';
 
 // API functions
 export async function registerUser({name, email, password}) {
@@ -32,7 +35,7 @@ export async function logoutUser() {
 
 export async function getCurrentUser() {
   try {
-    const response = await axios.get(`${API_URL}/me`, { withCredentials: true });
+    const response = await axios.get(`${API_URL}/get-me`, { withCredentials: true });
     return response.data;
   } catch (error) {
     throw error.response.data;
