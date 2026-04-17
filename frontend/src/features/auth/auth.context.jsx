@@ -1,13 +1,20 @@
-import {createContext, useContext, useState} from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  // ✅ start as false OR handle properly
+  const [loading, setLoading] = useState(false);
+
+  // ✅ optional: simulate init (or fetch user later)
+  useEffect(() => {
+    setLoading(false); // ensures UI is not blocked
+  }, []);
 
   return (
-    <AuthContext.Provider value={{user, setUser, loading, setLoading}}>
+    <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
       {children}
     </AuthContext.Provider>
   );

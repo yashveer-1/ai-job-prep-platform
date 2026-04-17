@@ -1,8 +1,7 @@
-
 main {
   min-height: 100vh;
   width: 100%;
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
 
@@ -106,12 +105,10 @@ main {
   width: 100%;
   height: 100%;
 
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent);
 
   transition: 0.5s;
 }
@@ -126,12 +123,14 @@ main {
   outline: none;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.6);
 }
+
 .form-text {
   margin-top: 1.2rem;
   text-align: center;
   font-size: 0.9rem;
   color: #666;
 }
+
 .link-button {
   background: none;
   border: none;

@@ -16,6 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     console.log("Sending:", { email, password }); // DEBUG
 
     try {
@@ -25,7 +26,7 @@ const Login = () => {
       console.log("Login success");
 
       // ✅ Redirect after login
-      navigate('/');
+      navigate('/'); // Redirect to home or dashboard
     } catch (err) {
       console.error("Login error:", err);
       alert(err?.message || "Login failed");
