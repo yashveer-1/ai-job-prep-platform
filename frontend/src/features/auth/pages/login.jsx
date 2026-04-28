@@ -5,67 +5,85 @@ import { useAuth } from '../hooks/useAuth.js';
 
 const Login = () => {
   const navigate = useNavigate();
-
-  // ✅ Correct extraction
   const { handleLogin, loading } = useAuth();
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
 
-  // ✅ Clean submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-
-    console.log("Sending:", { email, password }); // DEBUG
+    setError('');
 
     try {
-      // ✅ IMPORTANT: await
       await handleLogin({ email, password });
-
-      console.log("Login success");
-
-      // ✅ Redirect after login
-      navigate('/'); // Redirect to home or dashboard
+      navigate('/');
     } catch (err) {
       console.error("Login error:", err);
-      alert(err?.message || "Login failed");
+      setError(err?.message || "Login failed");
     }
   };
 
-  // ✅ Correct loading usage
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   return (
-    <main>
-      <div className="form-container">
-        <h1>Login</h1>
+    <main className="auth-page">
+      <section className="auth-hero">
+        <div className="brand-lockup auth-brand">
+          <span className="brand-mark">
+            <img src="/interview-master-logo.svg" alt="" />
+          </span>
+          <div>
+            <p className="eyebrow">Interview Master</p>
+            <h1>Practice with a plan, not guesswork.</h1>
+          </div>
+        </div>
+
+        <div className="auth-preview">
+          <p>Match score</p>
+          <strong>82%</strong>
+          <span>Likely questions, skill gaps, and prep tips in one focused report.</span>
+        </div>
+      </section>
+
+      <section className="form-container" aria-labelledby="login-title">
+        <p className="eyebrow">Welcome back</p>
+        <h2 id="login-title">Log in to your workspace</h2>
+        <p className="auth-subtitle">Continue preparing for your next interview.</p>
 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label htmlFor="email">Email:</label>
-            <input
-              type="email"
-              id="email"
-              value={email}                 // ✅ controlled input
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <label htmlFor="email">
+              Email
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                placeholder="you@example.com"
+                required
+              />
+            </label>
 
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}            // ✅ controlled input
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <label htmlFor="password">
+              Password
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                placeholder="Enter your password"
+                required
+              />
+            </label>
           </div>
 
+          {error && <p className="auth-error">{error}</p>}
+
           <div className="button primary-button">
-            <button type="submit">Login</button>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
           </div>
         </form>
 
@@ -79,7 +97,7 @@ const Login = () => {
             Register
           </button>
         </p>
-      </div>
+      </section>
     </main>
   );
 };

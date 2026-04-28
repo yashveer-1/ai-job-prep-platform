@@ -10,9 +10,6 @@ const Blacklist = require('../models/blacklist.model');
  */
 async function registerUserController(req, res) {
     try {
-        console.log("BODY:", req.body);
-        console.log("JWT_SECRET:", process.env.JWT_SECRET);
-
         const { name, email, password } = req.body;
 
         // ✅ Basic validation
@@ -83,8 +80,6 @@ async function registerUserController(req, res) {
  */
 async function loginUserController(req, res) {
     try {
-        console.log("LOGIN BODY:", req.body);
-
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -130,7 +125,6 @@ async function loginUserController(req, res) {
             },
             token
         });
-        console.log("SIGN SECRET:", process.env.JWT_SECRET);
 
 
     } catch (error) {
@@ -147,8 +141,11 @@ async function logoutUserController(req, res) {
     const token = req.cookies.token;
     if(token) {
         try {
-            // Add token to blacklist
-            const blacklistedToken = new Blacklist({ token });
+            const decoded = jwt.decode(token);
+            const expiresAt = decoded?.exp
+                ? new Date(decoded.exp * 1000)
+                : new Date(Date.now() + 24 * 60 * 60 * 1000);
+            const blacklistedToken = new Blacklist({ token, expiresAt });
             await blacklistedToken.save();
         } catch (error) {
             console.error('Error blacklisting token:', error);

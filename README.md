@@ -1,89 +1,123 @@
-# AI Job Preparation Platform 🚀
+# Interview Master
 
-An AI-powered full-stack platform that helps users analyze resumes, identify skill gaps, and prepare for job interviews using automated insights.
+Interview Master is a full-stack AI interview preparation app. Users can register, log in, upload or paste a resume, paste a job description, and generate a structured interview report with a match score, technical questions, behavioral questions, skill gaps, and preparation tips.
 
----
+## Features
 
-## 🌐 Overview
+- Cookie-based authentication with protected React routes
+- Resume input via PDF upload or pasted text
+- Gemini-powered interview report generation
+- Zod validation for AI response shape
+- Saved interview reports per user
+- Recent report history in the dashboard
+- Bright and dark dashboard themes
+- Custom Interview Master branding and favicon
 
-This platform enables users to upload resumes, compare them with job descriptions, and receive AI-driven feedback including skill gap analysis, ATS scoring, and interview preparation assistance.
+## Tech Stack
 
----
+- Frontend: React, Vite, Sass, Axios, React Router
+- Backend: Node.js, Express, MongoDB, Mongoose
+- Auth: JWT stored in httpOnly cookies
+- Uploads: Multer memory storage
+- PDF parsing: pdf-parse
+- AI: Google GenAI / Gemini
+- Validation: Zod
 
-## 🔗 Key Features
+## Architecture
 
-- 🔐 Secure user authentication (JWT-based login/register)
-- 📄 Resume upload and parsing
-- 🤖 AI-powered resume analysis using Google Gemini API
-- 🎯 Job description matching for skill gap identification
-- 🧩 Automated interview question generation
-- 📊 ATS-style resume feedback system
+```text
+React/Vite frontend
+  -> Express REST API
+  -> MongoDB via Mongoose
+  -> Gemini report generation service
+```
 
----
+## Project Structure
 
-## 🧠 Tech Stack
+```text
+backend/
+  server.js
+  src/app.js
+  src/controllers/
+  src/middlewares/
+  src/models/
+  src/routes/
+  src/services/
 
-### Frontend
-- React.js
-- HTML, CSS
+frontend/
+  public/
+  src/features/auth/
+  src/features/interview/
+  src/services/
+```
 
-### Backend
-- Node.js
-- Express.js
-- JWT Authentication
+## Setup
 
-### Database
-- MongoDB
+1. Install backend dependencies:
 
-### AI Integration
-- Google Gemini API
-
----
-
-## 🏗️ Architecture
-
-Frontend (React)  
-→ Backend (Express REST APIs)  
-→ MongoDB (Data Storage)  
-→ Gemini API (AI Processing)
-
----
-
-## 📁 Project Structure
-ai-job-prep-platform/
-│
-├── frontend/ # React frontend
-├── backend/ # Express backend APIs
-├── .gitignore
-└── README.md
-
-
-
----
-
-## ⚙️ Installation & Setup
-
-### 1. Clone the repository
 ```bash
-git clone https://github.com/yashveer-1/ai-job-prep-platform.git
-cd ai-job-prep-platform
-
-
-2. Install dependencies
-Backend
 cd backend
 npm install
+```
 
-Frontend
+2. Create backend environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in `MONGO_URI`, `JWT_SECRET`, and `GOOGLE_GENAI_API_KEY`.
+
+3. Install frontend dependencies:
+
+```bash
 cd ../frontend
 npm install
+```
 
-3. Run the application
-Start backend
+4. Optional frontend environment file:
+
+```bash
+cp .env.example .env
+```
+
+The default frontend API fallback is `http://localhost:5000/api`.
+
+5. Run the backend:
+
+```bash
 cd backend
-npm start
-Start frontend
-cd ../frontend
 npm run dev
+```
 
+6. Run the frontend:
 
+```bash
+cd frontend
+npm run dev
+```
+
+## API Overview
+
+- `POST /api/auth/register` creates a user and sets an auth cookie
+- `POST /api/auth/login` logs in and sets an auth cookie
+- `POST /api/auth/logout` clears the auth cookie and blacklists the token
+- `GET /api/auth/get-me` returns the current user
+- `POST /api/interview` generates and saves an interview report
+- `GET /api/interview` lists recent saved reports for the current user
+- `GET /api/interview/:id` returns one saved report owned by the current user
+
+## Interview Talking Points
+
+- The app separates routes, controllers, services, middleware, and models.
+- Auth uses httpOnly cookies rather than localStorage tokens.
+- File uploads are parsed in memory and never written to disk.
+- AI output is validated before it is returned or persisted.
+- Reports are user-owned and can be revisited from history.
+
+## Production Notes
+
+- Do not commit `.env` files or real API keys.
+- Rotate any exposed MongoDB or GenAI credentials.
+- Add rate limiting before exposing AI generation publicly.
+- Add automated tests around auth, report validation, and report ownership.

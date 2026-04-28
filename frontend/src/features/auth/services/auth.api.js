@@ -1,43 +1,40 @@
-import axios from 'axios';
-axios.create({
-  withCredentials: true,
-});
+import { api } from '../../../services/api.js';
 
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = '/auth';
 
 // API functions
-export async function registerUser({name, email, password}) {
+export async function registerUser({ name, email, password }) {
   try {
-    const response = await axios.post(`${API_URL}/register`, { name, email, password });
+    const response = await api.post(`${API_URL}/register`, { name, email, password });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response?.data || { message: 'Registration failed' };
   }
 }
 
-export async function loginUser({email, password}) {
+export async function loginUser({ email, password }) {
   try {
-    const response = await axios.post(`${API_URL}/login`, { email, password }, { withCredentials: true });
+    const response = await api.post(`${API_URL}/login`, { email, password });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response?.data || { message: 'Login failed' };
   }
 }
 
 export async function logoutUser() {
   try {
-    const response = await axios.post(`${API_URL}/logout`, {}, { withCredentials: true }    );
+    const response = await api.post(`${API_URL}/logout`);
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response?.data || { message: 'Logout failed' };
   }
 }
 
 export async function getCurrentUser() {
   try {
-    const response = await axios.get(`${API_URL}/get-me`, { withCredentials: true });
+    const response = await api.get(`${API_URL}/get-me`);
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    throw error.response?.data || { message: 'Unable to fetch current user' };
   }
-}   
+}

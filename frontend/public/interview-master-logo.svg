@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">Interview Master logo</title>
+  <desc id="desc">A structured monogram with a conversation mark and check detail.</desc>
+  <defs>
+    <linearGradient id="im-bg" x1="16" y1="10" x2="80" y2="86" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#315B96"/>
+      <stop offset="1" stop-color="#16825D"/>
+    </linearGradient>
+    <linearGradient id="im-shine" x1="24" y1="16" x2="70" y2="78" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity=".04"/>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" rx="22" fill="#172033"/>
+  <rect x="8" y="8" width="80" height="80" rx="18" fill="url(#im-bg)"/>
+  <path d="M25 28h24c12.2 0 22 8.9 22 20.6S61.2 69.2 49 69.2h-5.4L31.5 79v-9.8H25c-4.4 0-8-3.6-8-8V36c0-4.4 3.6-8 8-8Z" fill="#fff" opacity=".96"/>
+  <path d="M24.8 56.5 35 46.4l8.2 8.1 17.4-17.3 5.2 5.2-22.6 22.5L35 56.8l-5 5-5.2-5.3Z" fill="#172033"/>
+  <path d="M23 31.5c0-3 2.5-5.5 5.5-5.5h20.8c10.4 0 19.4 6 23.4 14.6C69.5 30 59.8 22 48.5 22H26.8C20.8 22 16 26.8 16 32.8v27.1c0 4.7 3 8.7 7.1 10.2L23 31.5Z" fill="url(#im-shine)"/>
+</svg>

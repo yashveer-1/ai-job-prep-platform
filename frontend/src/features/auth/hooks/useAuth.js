@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import  {AuthContext} from "../auth.context.jsx";
+import  {AuthContext} from "../auth.context-value.js";
 import { loginUser, registerUser, logoutUser, getCurrentUser } from "../services/auth.api.js";
 
 export const useAuth = () => {
@@ -8,7 +8,7 @@ export const useAuth = () => {
     setLoading(true);
     try {
       const userData = await loginUser({ email, password });
-      setUser(userData);
+      setUser(userData.user);
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -20,7 +20,7 @@ export const useAuth = () => {
     setLoading(true);
     try {
       const userData = await registerUser({ name, email, password });
-      setUser(userData);
+      setUser(userData.user);
     } catch (error) {
       console.error("Registration failed:", error);
       throw error;
@@ -44,7 +44,7 @@ export const useAuth = () => {
     setLoading(true);
     try {
       const userData = await getCurrentUser();
-      setUser(userData);
+      setUser(userData.user);
     } catch (error) {
       console.error("Fetching current user failed:", error);
       setUser(null); // Clear user on failure

@@ -9,10 +9,11 @@ const blacklistSchema = new mongoose.Schema({
     expiresAt: {
         type: Date,
         required: true,
-        default: Date.now // fallback if not provided
-
+        default: () => new Date(Date.now() + 24 * 60 * 60 * 1000)
     }
 });
+
+blacklistSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const Blacklist = mongoose.model('Blacklist', blacklistSchema);
 

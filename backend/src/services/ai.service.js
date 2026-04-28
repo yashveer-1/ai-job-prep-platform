@@ -1,6 +1,5 @@
 const { GoogleGenAI } = require("@google/genai");
 const { z } = require("zod");
-const { zodToJsonSchema } = require("zod-to-json-schema");
 
 // Initialize Google GenAI client
 const genai = new GoogleGenAI({
@@ -9,7 +8,7 @@ const genai = new GoogleGenAI({
 
 // Define the expected structure of the interview report using Zod
 const interviewReportSchema = z.object({
-  matchScore: z.number(),
+  matchScore: z.number().min(0).max(100),
   technicalQuestions: z.array(
     z.object({
       question: z.string(),
@@ -106,7 +105,9 @@ try {
   throw e;
 }
 
-  return report;
+  const validatedReport = interviewReportSchema.parse(report);
+
+  return validatedReport;
 }
 
 module.exports = {

@@ -1,16 +1,36 @@
-import { createContext, useState, useEffect } from 'react';
-
-export const AuthContext = createContext();
+import { useState, useEffect } from 'react';
+import { AuthContext } from './auth.context-value.js';
+import { getCurrentUser } from './services/auth.api.js';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // ✅ start as false OR handle properly
-  const [loading, setLoading] = useState(false);
-
-  // ✅ optional: simulate init (or fetch user later)
   useEffect(() => {
-    setLoading(false); // ensures UI is not blocked
+    let isMounted = true;
+
+    async function hydrateUser() {
+      try {
+        const data = await getCurrentUser();
+        if (isMounted) {
+          setUser(data.user);
+        }
+      } catch {
+        if (isMounted) {
+          setUser(null);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    hydrateUser();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

@@ -17,6 +17,12 @@ body,
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
-  background-color: #212121; /* or white depending on your design */
-  color: #fff; /* important if background is black */
+  background-color: #f5f7fb;
+  color: #172033;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
 }
