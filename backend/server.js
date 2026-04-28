@@ -10,13 +10,13 @@ async function startServer() {
     await connectDB();
     console.log('Connected to MongoDB');
 
-    const report = await generateInterviewReport({
-      resume,
-      selfDescription,
-      jobDescription
-    });
+    // const report = await generateInterviewReport({
+    //   resume,
+    //   selfDescription,
+    //   jobDescription
+    // });
 
-    console.log("Generated Interview Report:", report);
+    // console.log("Generated Interview Report:", report);
 
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {

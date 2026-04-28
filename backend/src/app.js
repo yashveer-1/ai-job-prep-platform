@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
+
 const app = express();  // ✅ FIRST create app
 
 // ✅ THEN use middleware
@@ -15,9 +16,11 @@ app.use(cookieParser());
 
 // Import routes
 const AuthRouter = require('./routes/auth.route');
+const InterviewRouter = require('./routes/interviewRoute');
 
 // Use routes
 app.use('/api/auth', AuthRouter);
+app.use('/api/interview', InterviewRouter);
 
 // Global error handler
 app.use((err, req, res, next) => {
