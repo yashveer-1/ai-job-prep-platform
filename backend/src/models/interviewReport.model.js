@@ -13,13 +13,13 @@ const mongoose = require('mongoose');
 const technicalQuestionSchema = new mongoose.Schema({
     question: { type: String, required: true },
     intention: { type: String, required: true },
-    answer: { type: String, required: true },
+    answer: { type: String, default: "" },   // ✅ FIX
 }, { _id: false });
 
 const behavioralQuestionSchema = new mongoose.Schema({
     question: { type: String, required: true },
     intention: { type: String, required: true },
-    answer: { type: String, required: true },
+    answer: { type: String, default: "" },   // ✅ FIX
 }, { _id: false });
 const skillGapAnalysisSchema = new mongoose.Schema({
     skill: { type: String, required: true },
