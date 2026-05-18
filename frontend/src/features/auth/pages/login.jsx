@@ -16,10 +16,12 @@ const Login = () => {
     setError('');
 
     try {
-      await handleLogin({ email, password });
+      await handleLogin({
+        email: email.trim().toLowerCase(),
+        password,
+      });
       navigate('/');
     } catch (err) {
-      console.error("Login error:", err);
       setError(err?.message || "Login failed");
     }
   };

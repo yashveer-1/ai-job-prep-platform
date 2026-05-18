@@ -5,6 +5,7 @@ import {
   getInterviewReport,
   getInterviewReports,
 } from '../services/interview.api.js';
+import { hasAuthToken } from '../../../services/api.js';
 import './dashboard.scss';
 
 const emptyForm = {
@@ -42,6 +43,12 @@ function Dashboard() {
   }, [theme]);
 
   useEffect(() => {
+    if (!user || !hasAuthToken()) {
+      setReports([]);
+      setHistoryLoading(false);
+      return undefined;
+    }
+
     let isMounted = true;
 
     async function loadReports() {
@@ -51,8 +58,10 @@ function Dashboard() {
         if (isMounted) {
           setReports(reportHistory);
         }
-      } catch (err) {
-        console.error('Unable to load report history:', err);
+      } catch {
+        if (isMounted) {
+          setReports([]);
+        }
       } finally {
         if (isMounted) {
           setHistoryLoading(false);
@@ -65,7 +74,7 @@ function Dashboard() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [user]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;

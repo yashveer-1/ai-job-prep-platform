@@ -1,4 +1,12 @@
-import { api } from '../../../services/api.js';
+import { api, hasAuthToken } from '../../../services/api.js';
+
+let reportHistoryRequest = null;
+
+function assertLoggedIn() {
+  if (!hasAuthToken()) {
+    throw { message: 'Please log in before generating a report.' };
+  }
+}
 
 export async function generateInterviewReport({
   resume,
@@ -7,13 +15,13 @@ export async function generateInterviewReport({
   jobDescription,
 }) {
   try {
+    assertLoggedIn();
+
     const formData = new FormData();
 
     if (file) {
-      formData.append('file', file);
-    }
-
-    if (resume) {
+      formData.append('resume', file);
+    } else if (resume) {
       formData.append('resume', resume);
     }
 
@@ -29,15 +37,29 @@ export async function generateInterviewReport({
 
 export async function getInterviewReports() {
   try {
-    const response = await api.get('/interview');
+    if (!hasAuthToken()) {
+      return [];
+    }
+
+    reportHistoryRequest ??= api.get('/interview').finally(() => {
+      reportHistoryRequest = null;
+    });
+
+    const response = await reportHistoryRequest;
     return response.data.reports;
   } catch (error) {
+    if (error.response?.status === 401) {
+      return [];
+    }
+
     throw error.response?.data || { message: 'Unable to fetch reports' };
   }
 }
 
 export async function getInterviewReport(id) {
   try {
+    assertLoggedIn();
+
     const response = await api.get(`/interview/${id}`);
     return response.data.report;
   } catch (error) {

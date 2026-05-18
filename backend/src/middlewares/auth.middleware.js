@@ -1,7 +1,19 @@
 const jwt = require('jsonwebtoken');
 const tokenBlacklist = require('../models/blacklist.model');
+
+function getToken(req) {
+    const authHeader = req.headers.authorization || '';
+    const [scheme, bearerToken] = authHeader.trim().split(/\s+/);
+
+    if (scheme?.toLowerCase() === 'bearer' && bearerToken) {
+        return bearerToken;
+    }
+
+    return req.cookies.token;
+}
+
 async function authUser(req, res, next) {
-    const token = req.cookies.token;
+    const token = getToken(req);
 
 
     if (!token) {

@@ -5,18 +5,25 @@ const cors = require('cors');
 
 const app = express();  // ✅ FIRST create app
 
-const allowedOrigins = [
+const rawAllowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5173/',
   'http://localhost:5174',
   'http://127.0.0.1:5173',
   'http://127.0.0.1:5174',
   'https://ai-job-prep-platform.vercel.app',
-];
+  'https://ai-job-prep-platform.onrender.com',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+const allowedOrigins = rawAllowedOrigins.map((origin) => origin.replace(/\/$/, ''));
 
 // ✅ THEN use middleware
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    const normalizedOrigin = origin?.replace(/\/$/, '');
+
+    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
       return;
     }

@@ -16,10 +16,13 @@ const Register = () => {
         e.preventDefault()
         setError('')
         try {
-            await handleRegister({ name, email, password })
+            await handleRegister({
+                name: name.trim(),
+                email: email.trim().toLowerCase(),
+                password,
+            })
             navigate('/')
         } catch (err) {
-            console.error("Registration error:", err)
             setError(err?.message || "Registration failed")
         }
     }

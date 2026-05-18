@@ -3,6 +3,25 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Blacklist = require('../models/blacklist.model');
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+function getAuthCookieOptions(maxAge) {
+    return {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'None' : 'Lax',
+        maxAge
+    };
+}
+
+function getClearCookieOptions() {
+    return {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'None' : 'Lax'
+    };
+}
+
 /** 
  * @desc Register a new user
  * @route POST /api/auth/register
@@ -10,17 +29,17 @@ const Blacklist = require('../models/blacklist.model');
  */
 async function registerUserController(req, res) {
     try {
-        const { name, email, password } = req.body;
+        const name = req.body.name?.trim();
+        const email = req.body.email?.trim().toLowerCase();
+        const { password } = req.body;
 
-        // ✅ Basic validation
         if (!name || !email || !password) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        // Check if user exists
-        let user = await userModel.findOne({$or: [{ email }, { name }] });
+        let user = await userModel.findOne({ email });
         if (user) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(409).json({ message: 'An account with this email already exists' });
         }
 
         // Hash password
@@ -49,12 +68,7 @@ async function registerUserController(req, res) {
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
-        });
+        res.cookie('token', token, getAuthCookieOptions(24 * 60 * 60 * 1000));
 
         return res.status(201).json({
             message: 'User registered successfully',
@@ -68,6 +82,11 @@ async function registerUserController(req, res) {
 
     } catch (error) {
         console.error('Error registering user:', error);
+
+        if (error.code === 11000) {
+            return res.status(409).json({ message: 'An account with this email already exists' });
+        }
+
         return res.status(500).json({ message: 'Server error' });
     }
 }
@@ -80,7 +99,8 @@ async function registerUserController(req, res) {
  */
 async function loginUserController(req, res) {
     try {
-        const { email, password } = req.body;
+        const email = req.body.email?.trim().toLowerCase();
+        const { password } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({ message: "All fields are required" });
@@ -110,12 +130,7 @@ async function loginUserController(req, res) {
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
-            maxAge: 60 * 60 * 1000 // 1 hour
-        });
+        res.cookie('token', token, getAuthCookieOptions(60 * 60 * 1000));
         res.status(200).json({
             message: 'Login successful',    
             user: {
@@ -138,7 +153,10 @@ async function loginUserController(req, res) {
  * @access Public
  */
 async function logoutUserController(req, res) {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization || '';
+    const [scheme, bearerToken] = authHeader.trim().split(/\s+/);
+    const token = scheme?.toLowerCase() === 'bearer' && bearerToken ? bearerToken : req.cookies.token;
+
     if(token) {
         try {
             const decoded = jwt.decode(token);
@@ -154,11 +172,7 @@ async function logoutUserController(req, res) {
     }
     
     try {
-        res.clearCookie('token', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict'
-        });
+        res.clearCookie('token', getClearCookieOptions());
         return res.status(200).json({ message: 'Logout successful' });
     } catch (error) {
         console.error('Error logging out user:', error);

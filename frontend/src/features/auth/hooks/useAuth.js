@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import  {AuthContext} from "../auth.context-value.js";
 import { loginUser, registerUser, logoutUser, getCurrentUser } from "../services/auth.api.js";
+import { clearAuthSession } from '../../../services/api.js';
 
 export const useAuth = () => {
   const { user, setUser, loading, setLoading } = useContext(AuthContext);
@@ -10,7 +11,8 @@ export const useAuth = () => {
       const userData = await loginUser({ email, password });
       setUser(userData.user);
     } catch (error) {
-      console.error("Login failed:", error);
+      clearAuthSession();
+      setUser(null);
       throw error;
     } finally {
       setLoading(false);
@@ -22,7 +24,8 @@ export const useAuth = () => {
       const userData = await registerUser({ name, email, password });
       setUser(userData.user);
     } catch (error) {
-      console.error("Registration failed:", error);
+      clearAuthSession();
+      setUser(null);
       throw error;
     } finally {
       setLoading(false);
@@ -33,9 +36,6 @@ export const useAuth = () => {
     try {
       await logoutUser();
       setUser(null);
-    } catch (error) {
-      console.error("Logout failed:", error);
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -45,8 +45,7 @@ export const useAuth = () => {
     try {
       const userData = await getCurrentUser();
       setUser(userData.user);
-    } catch (error) {
-      console.error("Fetching current user failed:", error);
+    } catch {
       setUser(null); // Clear user on failure
     } finally {
       setLoading(false);
